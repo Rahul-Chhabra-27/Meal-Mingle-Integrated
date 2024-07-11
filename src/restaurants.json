@@ -1,0 +1,201 @@
+[
+    {
+        "restaurantId": "1",
+        "restaurantName": "The Pizza Kings",
+        "restaurantAddress": {
+            "streetNumber": "12/92",
+            "streetName": "Babar Pur, Geeta Colony",
+            "city": "Delhi",
+            "country": "India"
+        },
+        "restaurantRating": 3.6,
+        "restaurantMinimumOrderAmount": 3500,
+        "restaurantDiscountPercentage": 5,
+        "restaurantAvailability": true,
+        "restaurantImageUrl": "restaurant_1.png",
+        "restaurantOperationDays": "Mon-Sun",
+        "restaurantOperationHours": "10:00AM-11:00PM",
+        "restaurantPhoneNumber": 7978654356,
+        "restaurantItems": [
+            {
+                "restaurantItemId": "1_1",
+                "restaurantItemName": "Margherita Pizza",
+                "restaurantItemPrice": 390,
+                "restaurantItemCategory": "Pizza",
+                "restaurantItemImageUrl": "restaurant_1_menu_1.png",
+                "restaurantItemCuisineType": "North Indian",
+                "restaurantItemVeg": true
+            }
+        ]
+    },
+    {
+        "restaurantId": "2",
+        "restaurantName": "Punjab Depot",
+        "restaurantAddress": {
+            "streetNumber": "456",
+            "streetName": "Rose Street",
+            "city": "Mumbai",
+            "country": "India"
+        },
+        "restaurantRating": 4.7,
+        "restaurantMinimumOrderAmount": 6500,
+        "restaurantDiscountPercentage": 15,
+        "restaurantAvailability": true,
+        "restaurantImageUrl": "restaurant_2.png",
+        "restaurantOperationDays": "Mon-Wed",
+        "restaurantOperationHours": "09:00AM-06:00PM",
+        "restaurantPhoneNumber": 8978654367,
+        "restaurantItems": [
+            {
+                "restaurantItemId": "2_1",
+                "restaurantItemName": "Paneer Tikka Burger",
+                "restaurantItemPrice": 400,
+                "restaurantItemCategory": "Burger",
+                "restaurantItemImageUrl": "restaurant_2_menu_1.png",
+                "restaurantItemCuisineType": "North Indian",
+                "restaurantItemVeg": true
+            },
+            {
+                "restaurantItemId": "2_2",
+                "restaurantItemName": "Punjabi Chilli Garlic Noodles",
+                "restaurantItemPrice": 350,
+                "restaurantItemCategory": "Noodles",
+                "restaurantItemImageUrl": "restaurant_2_menu_2.png",
+                "restaurantItemCuisineType": "North Indian",
+                "restaurantItemVeg": true
+            }
+        ]
+    },
+    {
+        "restaurantId": "3",
+        "restaurantName": "Southern Spice",
+        "restaurantAddress": {
+            "streetNumber": "789",
+            "streetName": "Coconut Lane",
+            "city": "Chennai",
+            "country": "India"
+        },
+        "restaurantRating": 4.5,
+        "restaurantMinimumOrderAmount": 0,
+        "restaurantDiscountPercentage": 0,
+        "restaurantAvailability": true,
+        "restaurantImageUrl": "restaurant_3.png",
+        "restaurantOperationDays": "Mon-Thu",
+        "restaurantOperationHours": "11:00AM-11:00PM",
+        "restaurantPhoneNumber": 6956654340,
+        "restaurantItems": [
+            {
+                "restaurantItemId": "3_1",
+                "restaurantItemName": "Veg Biryani",
+                "restaurantItemPrice": 200,
+                "restaurantItemCategory": "Biryani",
+                "restaurantItemImageUrl": "restaurant_3_menu_1.png",
+                "restaurantItemCuisineType": "South Indian",
+                "restaurantItemVeg": true
+            },
+            {
+                "restaurantItemId": "3_2",
+                "restaurantItemName": "Veg Sandwich",
+                "restaurantItemPrice": 150,
+                "restaurantItemCategory": "Sandwich",
+                "restaurantItemImageUrl": "restaurant_3_menu_2.png",
+                "restaurantItemCuisineType": "South Indian",
+                "restaurantItemVeg": true
+            },
+            {
+                "restaurantItemId": "3_3",
+                "restaurantItemName": "Southern Spice Thali",
+                "restaurantItemPrice": 100,
+                "restaurantItemCategory": "Thali",
+                "restaurantItemImageUrl": "restaurant_3_menu_3.png",
+                "restaurantItemCuisineType": "South Indian",
+                "restaurantItemVeg": true
+            }
+        ]
+    },
+    {
+        "restaurantId": "4",
+        "restaurantName": "Green Delight",
+        "restaurantAddress": {
+            "streetNumber": "123",
+            "streetName": "Leafy Road",
+            "city": "Bangalore",
+            "country": "India"
+        },
+        "restaurantRating": 4.3,
+        "restaurantMinimumOrderAmount": 5500,
+        "restaurantDiscountPercentage": 20,
+        "restaurantAvailability": true,
+        "restaurantImageUrl": "restaurant_4.png",
+        "restaurantOperationDays": "Mon-Sat",
+        "restaurantOperationHours": "01:00AM-04:00PM",
+        "restaurantPhoneNumber": 7956678345,
+        "restaurantItems": [
+            {
+                "restaurantItemId": "4_1",
+                "restaurantItemName": "Veg Biryani",
+                "restaurantItemPrice": 300,
+                "restaurantItemCategory": "Biryani",
+                "restaurantItemImageUrl": "restaurant_4_menu_1.png",
+                "restaurantItemCuisineType": "South Indian",
+                "restaurantItemVeg": true
+            },
+            {
+                "restaurantItemId": "4_2",
+                "restaurantItemName": "Aloo Gobi",
+                "restaurantItemPrice": 250,
+                "restaurantItemCategory": "Thali",
+                "restaurantItemImageUrl": "restaurant_4_menu_2.png",
+                "restaurantItemCuisineType": "North Indian",
+                "restaurantItemVeg": true
+            },
+            {
+                "restaurantItemId": "4_3",
+                "restaurantItemName": "Harvest Bowl Salad",
+                "restaurantItemPrice": 200,
+                "restaurantItemCategory": "Salad",
+                "restaurantItemImageUrl": "restaurant_4_menu_3.png",
+                "restaurantItemCuisineType": "South Indian",
+                "restaurantItemVeg": true
+            }
+        ]
+    },
+    {
+        "restaurantId": "5",
+        "restaurantName": "Rajasthani Thali",
+        "restaurantAddress": {
+            "streetNumber": "456",
+            "streetName": "Heritage Street",
+            "city": "Jaipur",
+            "country": "India"
+        },
+        "restaurantRating": 4.6,
+        "restaurantMinimumOrderAmount": 0,
+        "restaurantDiscountPercentage": 0,
+        "restaurantAvailability": true,
+        "restaurantImageUrl": "restaurant_5.png",
+        "restaurantOperationDays": "Mon-Sat",
+        "restaurantOperationHours": "10:00AM-06:00PM",
+        "restaurantPhoneNumber": 8706721345,
+        "restaurantItems": [
+            {
+                "restaurantItemId": "5_1",
+                "restaurantItemName": "Gatte ki Sabzi",
+                "restaurantItemPrice": 280,
+                "restaurantItemCategory": "Thali",
+                "restaurantItemImageUrl": "restaurant_5_menu_1.png",
+                "restaurantItemCuisineType": "North Indian",
+                "restaurantItemVeg": true
+            },
+            {
+                "restaurantItemId": "5_2",
+                "restaurantItemName": "Ghevar",
+                "restaurantItemPrice": 220,
+                "restaurantItemCategory": "Dessert",
+                "restaurantItemImageUrl": "restaurant_5_menu_2.png",
+                "restaurantItemCuisineType": "North Indian",
+                "restaurantItemVeg": true
+            }
+        ]
+    }
+]

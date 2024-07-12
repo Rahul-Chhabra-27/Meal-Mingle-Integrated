@@ -13,36 +13,31 @@ const AdminEmailLogin = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
 
-    const emailLogin = async () => {
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-
-            // Simulate backend API call since backend is not running
-            // Instead of actual fetch call, we'll handle success directly
-            // const response = await fetch('YOUR_BACKEND_AUTH_ENDPOINT', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({ email, password }),
-            // });
-
-            // if (!response.ok) {
-            //     const errorData = await response.json();
-            //     throw new Error(errorData.message || "An Error Occurred during Login");
-            // }
-
-            // Simulated success case
-            // const { token } = await response.json();
-            // localStorage.setItem("token", token);
-            const simulatedToken = "jwt-token-from-backend-upon-admin-email-login";
-            localStorage.setItem("token", simulatedToken);
-
-            toast.success('Logged In with Email Successfully!');
+    const loginAdminToPortal = async () => {
+        const adminData = { userEmail:email, userPassword : password };
+        const response = await fetch('http://localhost:8090/api/users/login/admin',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+            },
+            body:JSON.stringify(adminData)
+        })
+        const data = await response.json();
+        console.log(data);
+        if(data.error != "") {
+            toast.error(data.message);
+        }
+        else {
+            toast.success(data.message);
+            localStorage.setItem('token',data.data.token);
             setTimeout(() => {
                 navigate("/partner-with-us");
             }, 2000);
+        }
+    }
+    const emailLogin = async () => {
+        try {
+            loginAdminToPortal();
         } catch (err: any) {
             console.error(err);
             toast.error(err.message || "An Unknown Error Occurred during Login");

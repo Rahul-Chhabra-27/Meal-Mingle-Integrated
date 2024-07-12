@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
+import { toast } from 'react-toastify';
 
 interface OrderItem {
     orderItemName: string;
@@ -29,25 +30,40 @@ interface Order {
 const MyOrders = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const token = localStorage.getItem('token');
+    const fetchOrders = async() => {
+        const response = await fetch('http://localhost:8093/api/orders',{
+            method:'GET',
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        });
+        const data = await response.json();
+        console.log(data.data.order)
+        setOrders(data.data.order)
+    }
     useEffect(() => {
-        const fetchOrders = async() => {
-            const response = await fetch('http://localhost:8093/api/orders',{
-                method:'GET',
-                headers:{
-                    'Content-Type':'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            });
-            const data = await response.json();
-            console.log(data.data.order)
-            setOrders(data.data.order)
-        }
         fetchOrders();
     }, []);
 
-    const cancelOrder = (orderId: string) => {
-        const updatedOrders = orders.filter(order => order.id !== orderId); 
-        setOrders(updatedOrders);
+    const cancelOrder = async (order: any) => {
+        console.log(order)
+        const token = localStorage.getItem('token')
+        const response = await fetch(`http://localhost:8093/api/orders/${order.orderId}`,{
+            method:'DELETE',
+            headers:{
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        const data = await response.json();
+
+        if(data.error != "") {
+            toast.error(data.message)
+        }
+        else {
+            toast.success(data.message)
+            fetchOrders();
+        }
     };
     console.log(orders)
     return (
@@ -81,7 +97,7 @@ const MyOrders = () => {
                                 <div className='font-semibold mt-2'>Total Amount: ₹{order.orderTotalPrice}</div>
                                 {order.orderStatus === 'Pending' && (
                                     <button
-                                        onClick={() => cancelOrder(order.id)}
+                                        onClick={() => cancelOrder(order)}
                                         className='mt-2 px-4 py-2 bg-red-500 text-white rounded'
                                     >
                                         Cancel Order

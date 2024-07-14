@@ -5,13 +5,14 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface RestaurantItem {
-    restaurantItemId: string;
+    restaurantItemId?: string;
     restaurantItemName: string;
     restaurantItemPrice: number;
     restaurantItemCategory: string;
     restaurantItemImageUrl: string;
     restaurantItemCuisineType: string;
     restaurantItemVeg: boolean;
+    restaurantName : string | undefined
 }
 
 interface Restaurant {
@@ -35,27 +36,16 @@ const cuisineTypes = [
 ];
 
 const RegisterRestaurantItem: React.FC<RegisterRestaurantItemProps> = ({ onSubmit }) => {
-    const { restaurantId } = useParams<{ restaurantId: string }>();
-
-    const storedRestaurants: Restaurant[] = JSON.parse(localStorage.getItem('restaurants') || '[]');
-    const restaurant = storedRestaurants.find(r => r.restaurantId === restaurantId);
-
-    if (!restaurant) {
-        throw new Error('Restaurant Not Found!');
-    }
-
-    const restaurantItems = restaurant.restaurantItems || [];
-
-    const nextItemNumber = restaurantItems.length + 1;
-
+    const { restaurantName, restaurantId } = useParams();
+    console.log(restaurantName, restaurantId);
     const initialRestaurantItem: RestaurantItem = {
-        restaurantItemId: `${restaurantId}_${nextItemNumber}`,
         restaurantItemName: '',
         restaurantItemPrice: 0,
         restaurantItemCategory: '',
         restaurantItemImageUrl: '',
         restaurantItemCuisineType: '',
         restaurantItemVeg: true,
+        restaurantName : restaurantName
     };
 
     const [restaurantItem, setRestaurantItem] = useState<RestaurantItem>(initialRestaurantItem);
@@ -81,6 +71,35 @@ const RegisterRestaurantItem: React.FC<RegisterRestaurantItemProps> = ({ onSubmi
         }));
     };
 
+    async function addResturantItem() {
+        const restaurantItemData = {
+            restaurantItem : {
+                restaurantItemName: restaurantItem.restaurantItemName,
+                restaurantItemPrice: restaurantItem.restaurantItemPrice,
+                restaurantItemCategory: restaurantItem.restaurantItemCategory,
+                restaurantItemImageUrl: restaurantItem.restaurantItemImageUrl,
+                restaurantItemCuisineType: restaurantItem.restaurantItemCuisineType,
+                restaurantItemVeg: restaurantItem.restaurantItemVeg,
+                restaurantName : restaurantItem.restaurantName
+
+            }
+        }
+        const response = await fetch(`http://localhost:8091/api/restaurant/items/add`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(restaurantItemData),
+        });
+        const data = await response.json();
+        console.log(data);
+        if (data.error == "" && data.data != null) {
+            toast.success('Restaurant Item Added Successfully!');
+        } else {
+            toast.error(data.error);
+        }
+    }
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -88,31 +107,7 @@ const RegisterRestaurantItem: React.FC<RegisterRestaurantItemProps> = ({ onSubmi
         if (!isValid) {
             return;
         }
-
-        const updatedRestaurant = {
-            ...restaurant,
-            restaurantItems: [...restaurantItems, restaurantItem]
-        };
-
-        const updatedRestaurants = storedRestaurants.map(r =>
-            r.restaurantId === restaurantId ? updatedRestaurant : r
-        );
-
-        localStorage.setItem('restaurants', JSON.stringify(updatedRestaurants));
-        toast.success('Restaurant Item Added Successfully!');
-
-        const nextItemNumberAfterSubmit = restaurantItems.length + 1;
-
-        setRestaurantItem({
-            ...initialRestaurantItem,
-            restaurantItemId: `${restaurantId}_${nextItemNumberAfterSubmit}`,
-            restaurantItemName: '',
-            restaurantItemPrice: 0,
-            restaurantItemCategory: '',
-            restaurantItemImageUrl: '',
-            restaurantItemCuisineType: '',
-            restaurantItemVeg: true,
-        });
+       addResturantItem();
 
         if (onSubmit) onSubmit();
         setTimeout(() => {

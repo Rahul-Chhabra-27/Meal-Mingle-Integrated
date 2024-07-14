@@ -17,6 +17,7 @@ interface BankDetails {
 const RestaurantBankDetails: React.FC = () => {
     const navigate = useNavigate();
     const { restaurantId } = useParams<{ restaurantId: string }>();
+    console.log(restaurantId);
     const location = useLocation();
     const nextPage = location.state?.nextPage || '/view-admin-restaurants';
 
@@ -38,6 +39,34 @@ const RestaurantBankDetails: React.FC = () => {
         setBankDetails({ ...bankDetails, [name]: value });
     };
 
+    async function addOwnerDetails() {
+        const userData = {
+            accountNumber: bankDetails.accountNumber,
+            bankName: bankDetails.bankName,
+            branchName: bankDetails.branchName,
+            ifscCode: bankDetails.ifscCode,
+            panNumber: bankDetails.panNumber,
+            adharNumber: bankDetails.aadhaarNumber,
+            gstNumber: bankDetails.gstNumber
+        }
+        const response = await fetch('http://localhost:8090/api/users/details', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(userData)
+        });
+        console.log(userData)
+        const data = await response.json();
+        if(data.error == "") {
+            toast.success('Bank Details Added Successfully!');
+        }
+        else {
+            toast.error(data.error);
+        }
+        console.log(data);
+    }
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -45,10 +74,7 @@ const RestaurantBankDetails: React.FC = () => {
         if (!isValid) {
             return;
         }
-
-        localStorage.setItem('bankDetails', JSON.stringify(bankDetails));
-
-        toast.success('Bank Details Saved Successfully!');
+        addOwnerDetails();
         setTimeout(() => {
             navigate(nextPage);
         }, 2000);
@@ -116,21 +142,12 @@ const RestaurantBankDetails: React.FC = () => {
             isValid = false;
         }
 
-        // GST Number
-        if (!bankDetails.gstNumber.trim()) {
-            errors.push('GST Number is Required.');
-            isValid = false;
-        } else if (!/^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d[Z]{1}[A-Z\d]{1}$/.test(bankDetails.gstNumber.trim())) {
-            errors.push('Invalid GST Number Format.');
-            isValid = false;
-        }
-
         setErrors(errors);
         if (errors.length > 0) {
             toast.error(errors[0]);
         }
 
-        return isValid;
+        return true;
     };
 
     return (

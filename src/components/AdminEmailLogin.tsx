@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const AdminEmailLogin = () => {
+    localStorage.removeItem('token');
     const navigate = useNavigate();
 
     const [email, setEmail] = useState("");

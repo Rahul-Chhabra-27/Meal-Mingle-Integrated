@@ -66,7 +66,7 @@ const App = () => {
         <Route path="/view-admin-restaurants" element={<ViewAdminRestaurants restaurants={restaurants} onDelete={handleDelete} />} />
         <Route path="/update-restaurant/:id" element={<UpdateRestaurant />} />
         <Route path="/admin/enter-bank-details/:restaurantId" element={<RestaurantBankDetails />} />
-        <Route path="/register-restaurant-item/:restaurantId" element={<RegisterRestaurantItem />} />
+        <Route path="/register-restaurant-item/:restaurantName" element={<RegisterRestaurantItem />} />
         <Route path="/view-admin-restaurant-items/:restaurantId" element={<ViewAdminRestaurantItems />} />
         <Route path="/update-restaurant-item/:restaurantId/:restaurantItemId" element={<UpdateRestaurantItem />} />
         <Route path="/view-admin-bank-details" element={<ViewAdminBankDetails />} />

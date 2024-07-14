@@ -88,17 +88,16 @@ const ViewAdminRestaurants: React.FC<RestaurantProp> = ({ onDelete }) => {
         }
     };
 
-    const handleAddMenu = (restaurantId: string, restaurantName :string) => {
+    const handleAddMenu = (restaurantId: string) => {
         const bankDetails = localStorage.getItem(`bankDetails`);
         if (!bankDetails) {
             navigate(`/admin/enter-bank-details/${restaurantId}`, {
                 state: { nextPage: `/register-restaurant-item/${restaurantId}`}
             });
         } else {
-
             navigate(`/register-restaurant-item/${restaurantId}`, {
                 state: {
-                restaurantId: restaurantId
+                    restaurantId: restaurantId
                 }
             });
         }
@@ -135,7 +134,7 @@ const ViewAdminRestaurants: React.FC<RestaurantProp> = ({ onDelete }) => {
                                     </div>
                                     <div className="flex justify-between mt-4">
                                         <button
-                                            onClick={() => handleAddMenu(data.restaurantId, data.restaurantName)}
+                                            onClick={() => handleAddMenu(data.restaurantId)}
                                             className="inline-block px-2 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300"
                                         >
                                             Add Menu

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminNavbar from './AdminNavbar';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -12,47 +12,65 @@ interface RestaurantItem {
     restaurantItemImageUrl: string;
     restaurantItemCuisineType: string;
     restaurantItemVeg: boolean;
+    restaurantId: string;
 }
 
 const ViewAdminRestaurantItems: React.FC = () => {
     const { restaurantId } = useParams<{ restaurantId: string }>();
+
+    const [restaurantItems, setRestaurantItems] = useState<RestaurantItem[]>([]);
     const navigate = useNavigate();
 
-    const storedRestaurants = JSON.parse(localStorage.getItem('restaurants') || '[]');
-    const restaurant = storedRestaurants.find((r: any) => r.restaurantId === restaurantId);
-
-    if (!restaurant) {
-        toast.error('Restaurant Not Found!');
-        return null;
+    const fetchRestaurantItems = async() => {
+        const response = await fetch(`http://localhost:8091/api/restaurant/${restaurantId}/items`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        const data = await response.json();
+        if (data.error === "" && data.data !== null) {
+            toast.success('Restaurant Items Fetched Successfully!');
+            setRestaurantItems(data.data.restaurantItems);
+        } else {
+            toast.error(data.error);
+        }
     }
-
-    const { restaurantItems } = restaurant;
-
+    useEffect(() => {
+        fetchRestaurantItems();
+    },[])
     const handleUpdate = (restaurantItemId: string) => {
         navigate(`/update-restaurant-item/${restaurantId}/${restaurantItemId}`);
     };
 
-    const handleDelete = (restaurantItemId: string) => {
-        const updatedRestaurantItems = restaurantItems.filter((item: RestaurantItem) => item.restaurantItemId !== restaurantItemId);
-        const updatedRestaurant = {
-            ...restaurant,
-            restaurantItems: updatedRestaurantItems
-        };
-
-        const updatedRestaurants = storedRestaurants.map((r: any) =>
-            r.restaurantId === restaurantId ? updatedRestaurant : r
-        );
-
-        localStorage.setItem('restaurants', JSON.stringify(updatedRestaurants));
-        toast.success('Restaurant Item Deleted Successfully!');
-        navigate(`/view-admin-restaurant-items/${restaurantId}`);
+    const handleDelete = async (restaurantItemId: string) => {
+        if (restaurantId === undefined) {
+            return;
+        }
+        const response = await fetch(`http://localhost:8091/api/restaurants/${restaurantId}/items/${restaurantItemId}`, {
+                method: 'DELETE',
+                headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+         });
+            
+        const data = await response.json();
+        if (data.error === "") {
+            toast.success('Restaurant Item Deleted Successfully!');
+            fetchRestaurantItems();
+        } else {
+            toast.error(data.error);
+        }
+        return;
     };
 
     return (
         <>
             <AdminNavbar />
             <div className='p-4 pl-20'>
-                <h1 className='font-semibold text-3xl mb-4'>Explore the Menu of {restaurant.restaurantName}</h1>
+                <h1 className='font-semibold text-3xl mb-4'>Explore the Menu of Restaurant Token No. {restaurantId}</h1>
                 {restaurantItems.length === 0 ? (
                     <div className="text-center text-xl">
                         <p className="mt-60 mb-4">No Restaurant Items Registered Yet!</p>

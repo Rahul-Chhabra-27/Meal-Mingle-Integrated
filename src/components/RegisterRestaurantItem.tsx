@@ -12,7 +12,7 @@ interface RestaurantItem {
     restaurantItemImageUrl: string;
     restaurantItemCuisineType: string;
     restaurantItemVeg: boolean;
-    restaurantName : string | undefined
+    restaurantId : string | undefined
 }
 
 interface Restaurant {
@@ -36,8 +36,8 @@ const cuisineTypes = [
 ];
 
 const RegisterRestaurantItem: React.FC<RegisterRestaurantItemProps> = ({ onSubmit }) => {
-    const { restaurantName, restaurantId } = useParams();
-    console.log(restaurantName, restaurantId);
+    const value= useParams();
+    console.log(value);
     const initialRestaurantItem: RestaurantItem = {
         restaurantItemName: '',
         restaurantItemPrice: 0,
@@ -45,7 +45,7 @@ const RegisterRestaurantItem: React.FC<RegisterRestaurantItemProps> = ({ onSubmi
         restaurantItemImageUrl: '',
         restaurantItemCuisineType: '',
         restaurantItemVeg: true,
-        restaurantName : restaurantName
+        restaurantId : value.restaurantId
     };
 
     const [restaurantItem, setRestaurantItem] = useState<RestaurantItem>(initialRestaurantItem);
@@ -80,8 +80,7 @@ const RegisterRestaurantItem: React.FC<RegisterRestaurantItemProps> = ({ onSubmi
                 restaurantItemImageUrl: restaurantItem.restaurantItemImageUrl,
                 restaurantItemCuisineType: restaurantItem.restaurantItemCuisineType,
                 restaurantItemVeg: restaurantItem.restaurantItemVeg,
-                restaurantName : restaurantItem.restaurantName
-
+                restaurantId : restaurantItem.restaurantId
             }
         }
         const response = await fetch(`http://localhost:8091/api/restaurant/items/add`, {
@@ -108,10 +107,9 @@ const RegisterRestaurantItem: React.FC<RegisterRestaurantItemProps> = ({ onSubmi
             return;
         }
        addResturantItem();
-
         if (onSubmit) onSubmit();
         setTimeout(() => {
-            navigate(`/view-admin-restaurant-items/${restaurantId}`);
+            navigate(`/view-admin-restaurant-items/${value.restaurantId}`);
         }, 2000);
     };
 

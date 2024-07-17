@@ -10,7 +10,7 @@ interface BankDetails {
     branchName: string;
     ifscCode: string;
     panNumber: string;
-    aadhaarNumber: string;
+    adharNumber: string;
     gstNumber: string;
 }
 
@@ -25,20 +25,33 @@ const UpdateAdminBankDetails: React.FC = () => {
         branchName: '',
         ifscCode: '',
         panNumber: '',
-        aadhaarNumber: '',
+        adharNumber: '',
         gstNumber: '',
     };
 
     const [bankDetails, setBankDetails] = useState<BankDetails>(initialBankDetails);
     const [errors, setErrors] = useState<string[]>([]);
 
-    useEffect(() => {
-        const storedBankDetails = localStorage.getItem('bankDetails');
-        if (storedBankDetails) {
-            setBankDetails(JSON.parse(storedBankDetails));
+    const saveBankDetails = async () => {
+        const response = await fetch('http://localhost:8090/api/users/details', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(bankDetails)
+        });
+        const data = await response.json();
+        console.log(data)
+        if (data.error === '') {
+            toast.success('Bank Details Updated Successfully!');
+            setTimeout(() => {
+                navigate(nextPage);
+            }, 2000);
+        } else {
+            toast.error(data.error);
         }
-    }, []);
-
+    }
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setBankDetails({ ...bankDetails, [name]: value });
@@ -51,13 +64,7 @@ const UpdateAdminBankDetails: React.FC = () => {
         if (!isValid) {
             return;
         }
-
-        localStorage.setItem('bankDetails', JSON.stringify(bankDetails));
-
-        toast.success('Bank Details Updated Successfully!');
-        setTimeout(() => {
-            navigate(nextPage);
-        }, 2000);
+        saveBankDetails();
     };
 
     const handleClose = () => {
@@ -111,13 +118,13 @@ const UpdateAdminBankDetails: React.FC = () => {
         }
 
         // Aadhar Number
-        if (!bankDetails.aadhaarNumber.trim()) {
+        if (!bankDetails.adharNumber.trim()) {
             errors.push('Aadhar Number is Required.');
             isValid = false;
-        } else if (isNaN(Number(bankDetails.aadhaarNumber))) {
+        } else if (isNaN(Number(bankDetails.adharNumber))) {
             errors.push('Aadhar Number must contain only Numeric Characters.');
             isValid = false;
-        } else if (bankDetails.aadhaarNumber.trim().length !== 12) {
+        } else if (bankDetails.adharNumber.trim().length !== 12) {
             errors.push('Aadhar Number must be exactly 12 Digits.');
             isValid = false;
         }
@@ -245,9 +252,9 @@ const UpdateAdminBankDetails: React.FC = () => {
                                 </label>
                                 <input
                                     type="text"
-                                    id="aadhaarNumber"
-                                    name="aadhaarNumber"
-                                    value={bankDetails.aadhaarNumber}
+                                    id="adharNumber"
+                                    name="adharNumber"
+                                    value={bankDetails.adharNumber}
                                     onChange={handleChange}
                                     className="form-input mt-1 block w-full rounded-md shadow-sm border h-10"
                                 />

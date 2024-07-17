@@ -61,11 +61,13 @@ const RestaurantBankDetails: React.FC = () => {
         const data = await response.json();
         if(data.error == "") {
             toast.success('Bank Details Added Successfully!');
+                setTimeout(() => {
+                navigate(nextPage);
+            }, 2000);
         }
         else {
             toast.error(data.error);
         }
-        console.log(data);
     }
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -75,9 +77,6 @@ const RestaurantBankDetails: React.FC = () => {
             return;
         }
         addOwnerDetails();
-        setTimeout(() => {
-            navigate(nextPage);
-        }, 2000);
     };
 
     const handleClose = () => {

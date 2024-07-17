@@ -38,8 +38,61 @@ interface RestaurantProp {
     onDelete: (id: string) => void;
 }
 
+interface User {
+    userName: string;
+    userId: string; 
+    userEmail: string;
+    userPhone: string;
+}
+interface BankDetails {
+    user:User
+    accountNumber: string;
+    bankName: string;
+    branchName: string;
+    ifscCode: string;
+    panNumber: string;
+    aadhaarNumber: string;
+    gstNumber: string;
+}
+
 const ViewAdminRestaurants: React.FC<RestaurantProp> = ({ onDelete }) => {
-    localStorage.setItem('bankDetails', JSON.stringify({"accountNumber":"121212121212","bankName":"SBI","branchName":"MAIHAR","ifscCode":"89I89I89I89","panNumber":"FHTPP5189N","aadhaarNumber":"787878787878","gstNumber":"19AAAAA0000A1Z5"}));
+    const initialBankDetails: BankDetails = {
+        user: {
+            userEmail:'',
+            userId:'',
+            userName:'',
+            userPhone:''
+        },
+        accountNumber: '',
+        bankName: '',
+        branchName: '',
+        ifscCode: '',
+        panNumber: '',
+        aadhaarNumber: '',
+        gstNumber: '',
+    };
+    //localStorage.setItem('bankDetails', JSON.stringify({"accountNumber":"121212121212","bankName":"SBI","branchName":"MAIHAR","ifscCode":"89I89I89I89","panNumber":"FHTPP5189N","aadhaarNumber":"787878787878","gstNumber":"19AAAAA0000A1Z5"}));
+    const [bankDetails,setBankDetails] = useState<BankDetails>(initialBankDetails);
+    useEffect(() => {
+        async function fetchBankDetails() {
+
+            const response = await fetch('http://localhost:8090/api/users/details',{
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const data = await response.json();
+
+            if (data.error == "" && data.data != null) {
+                console.log(data.data);
+                setBankDetails(data.data);
+            }
+
+        }
+        fetchBankDetails();
+    },[])
     const [restaurants, setRestaurants] = useState<RestaurantData[]>([]);
     const fetchRestaurants = async () => {
         try {
@@ -78,8 +131,8 @@ const ViewAdminRestaurants: React.FC<RestaurantProp> = ({ onDelete }) => {
     };
 
     const handleClick = (restaurantId: string) => {
-        const bankDetails = localStorage.getItem(`bankDetails`);
-        if (!bankDetails) {
+        
+        if (bankDetails.aadhaarNumber === '') {
             navigate(`/admin/enter-bank-details/${restaurantId}`, {
                 state: { nextPage: `/view-admin-restaurant-items/${restaurantId}` }
             });
@@ -89,8 +142,7 @@ const ViewAdminRestaurants: React.FC<RestaurantProp> = ({ onDelete }) => {
     };
 
     const handleAddMenu = (restaurantId: string) => {
-        const bankDetails = localStorage.getItem(`bankDetails`);
-        if (!bankDetails) {
+        if (bankDetails.aadhaarNumber === '') {
             navigate(`/admin/enter-bank-details/${restaurantId}`, {
                 state: { nextPage: `/register-restaurant-item/${restaurantId}`}
             });

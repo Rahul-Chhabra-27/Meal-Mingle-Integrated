@@ -11,16 +11,6 @@ interface Address {
     country: string;
 }
 
-interface RestaurantItem {
-    restaurantItemId: string;
-    restaurantItemName: string;
-    restaurantItemPrice: number;
-    restaurantItemCategory: string;
-    restaurantItemImageUrl: string;
-    restaurantItemCuisineType: string;
-    restaurantItemVeg: boolean;
-}
-
 interface RestaurantData {
     restaurantId: string;
     restaurantName: string;
@@ -93,11 +83,11 @@ const RegisterRestaurant: React.FC<RegisterRestaurantProps> = ({ onSubmit }) => 
             },
             body: JSON.stringify(postRestaurantData)
         })
-        console.log(response);
         const data = await response.json()
         if(data.error === ""){
             toast.success(data.message);
-            setRestaurantData(data.restaurant)
+            console.log(data.data.restaurant);
+            setRestaurantData(data.data.restaurant)
         }
         else {
             toast.error(data.message);
@@ -135,18 +125,6 @@ const RegisterRestaurant: React.FC<RegisterRestaurantProps> = ({ onSubmit }) => 
         if (!isValid) {
             return;
         }
-
-        const newRestaurantData: RestaurantData = {
-            ...restaurantData,
-            restaurantId: Math.floor(10 + Math.random() * 90).toString(),
-        };
-
-        const storedRestaurants = JSON.parse(localStorage.getItem('restaurants') || '[]');
-        const updatedRestaurantData = [...storedRestaurants, newRestaurantData];
-
-        localStorage.setItem('restaurants', JSON.stringify(updatedRestaurantData));
-
-        setRestaurantData(initialRestaurantData);
         if (onSubmit) onSubmit();
         toast.success('Restaurant Added Successfully!');
         setTimeout(() => {

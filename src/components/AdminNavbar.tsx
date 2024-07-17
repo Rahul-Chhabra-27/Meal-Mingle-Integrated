@@ -8,8 +8,40 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 
+interface User {
+    userName: string;
+    userId: string; 
+    userEmail: string;
+    userPhone: string;
+}
+interface BankDetails {
+    user:User
+    accountNumber: string;
+    bankName: string;
+    branchName: string;
+    ifscCode: string;
+    panNumber: string;
+    aadhaarNumber: string;
+    gstNumber: string;
+}
 const AdminNavbar = () => {
+    const initialBankDetails: BankDetails = {
+        user: {
+            userEmail:'',
+            userId:'',
+            userName:'',
+            userPhone:''
+        },
+        accountNumber: '',
+        bankName: '',
+        branchName: '',
+        ifscCode: '',
+        panNumber: '',
+        aadhaarNumber: '',
+        gstNumber: '',
+    };
     const [authStore, setAuthStore] = useState<any>({});
+    const [bankDetails, setBankDetails] = useState<BankDetails>(initialBankDetails);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -19,6 +51,26 @@ const AdminNavbar = () => {
 
         return () => unsubscribe();
     }, []);
+    useEffect(() => {
+        async function fetchBankDetails() {
+
+            const response = await fetch('http://localhost:8090/api/users/details',{
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const data = await response.json();
+
+            if (data.error == "" && data.data != null) {
+                console.log(data.data);
+                setBankDetails(data.data);
+            }
+
+        }
+        fetchBankDetails();
+    },[])
 
     const logout = async () => {
         try {
@@ -60,10 +112,13 @@ const AdminNavbar = () => {
                             <div className='text-gray-600 text-lg cursor-pointer mr-40'>Sign Up</div>
                         </Link>
                     )}
-                    {localStorage.getItem('bankDetails') && (
-                        <Link to='/view-admin-bank-details' className='relative'>
-                            <div className='mr-12 shadow-lg p-2 rounded-xl text-black cursor-pointer w-15 h-15'>Bank Account Summary</div>
-                        </Link>
+                    {bankDetails.aadhaarNumber !== '' && (
+                        <button 
+                            onClick={() => navigate('/view-admin-bank-details', { state: { bankDetails } })} 
+                            className='relative mr-12 shadow-lg p-2 rounded-xl text-black cursor-pointer w-15 h-15'
+                        >
+                            Bank Account Summary
+                       </button>
                     )}
                     {auth.currentUser && (
                         <div>

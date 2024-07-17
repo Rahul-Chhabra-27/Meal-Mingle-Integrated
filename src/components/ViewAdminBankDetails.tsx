@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import AdminNavbar from './AdminNavbar';
 
 const ViewAdminBankDetails = () => {
     const navigate = useNavigate();
     const [bankDetails, setBankDetails] = useState<any>(null);
-
     useEffect(() => {
-        const storedBankDetails = localStorage.getItem('bankDetails');
-        if (storedBankDetails) {
-            setBankDetails(JSON.parse(storedBankDetails));
+        async function fetchBankDetails() {
+            const response = await fetch('http://localhost:8090/api/users/details', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const data = await response.json();
+            if (data.error === "" && data.data !== null) {
+                setBankDetails(data.data);
+            }
         }
+        fetchBankDetails();
     }, []);
 
     const handleUpdate = () => {
